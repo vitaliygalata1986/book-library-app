@@ -1,14 +1,25 @@
 import styles from './BookForm.module.css';
+import { useDispatch } from 'react-redux';
 import { useState } from 'react';
+import { addBook } from '../../redux/books/actionCreators';
 
 function BookForm() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
+  const dispatch = useDispatch();
+
   const handleSubmit = (event) => {
     // здесь будет действие - будем выполнять операцию dispatch action
     event.preventDefault();
     if (title && author) {
       // dispatch action
+      const book = {
+        title,
+        author,
+      };
+      console.log(addBook(book));
+      dispatch(addBook(book)); // вызвав addBook мы получим объект с type/payload
+      // этот объект мы передаем в функцию dispatch
       setTitle('');
       setAuthor('');
     }

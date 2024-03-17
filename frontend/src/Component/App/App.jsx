@@ -15,7 +15,7 @@ function App() {
         </div>
         <div className={`${styles['app-right-column']}`}>
           <Filter></Filter>
-          {/* <BookList></BookList> */}
+          <BookList></BookList>
         </div>
       </main>
     </div>
