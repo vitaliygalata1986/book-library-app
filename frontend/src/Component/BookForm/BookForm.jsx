@@ -1,5 +1,6 @@
 import styles from './BookForm.module.css';
 import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import { addBook } from '../../redux/books/actionCreators';
 
@@ -16,8 +17,9 @@ function BookForm() {
       const book = {
         title,
         author,
+        id: uuidv4(),
       };
-      console.log(addBook(book));
+      // console.log(addBook(book));
       dispatch(addBook(book)); // вызвав addBook мы получим объект с type/payload
       // этот объект мы передаем в функцию dispatch
       setTitle('');

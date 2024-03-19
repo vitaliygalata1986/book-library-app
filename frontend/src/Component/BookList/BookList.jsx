@@ -3,7 +3,7 @@ import { useSelector, UseSelector } from 'react-redux';
 function BookList() {
   // из за того, что мы вызвали внешнюю функцию useSelector
   // react будет выполнять ререндеринг функции BookList
-  // при изменении сосстояния books
+  // при изменении состояния books
   const books = useSelector((state) => {
     // обычно эта функция возвращет часть состояния
     return state.books;
@@ -15,7 +15,7 @@ function BookList() {
       {books.length ? (
         <ul>
           {books.map((book, i) => (
-            <li key={i}>
+            <li key={book.id}>
               <div className={styles['book-info']}>
                 {++i}. {book.title} by <strong> {book.author}</strong>
               </div>
