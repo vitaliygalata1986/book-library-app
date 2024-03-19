@@ -1,6 +1,8 @@
 import styles from './BookList.module.css';
-import { useSelector, UseSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteBook } from '../../redux/books/actionCreators';
 function BookList() {
+  const dispatch = useDispatch();
   // из за того, что мы вызвали внешнюю функцию useSelector
   // react будет выполнять ререндеринг функции BookList
   // при изменении состояния books
@@ -18,6 +20,12 @@ function BookList() {
             <li key={book.id}>
               <div className={styles['book-info']}>
                 {++i}. {book.title} by <strong> {book.author}</strong>
+              </div>
+              <div className={styles['book-actions']}>
+                {/* <button onClick={() => console.log(deleteBook(book.id))}></button> */}
+                <button onClick={() => dispatch(deleteBook(book.id))}>
+                  Delete
+                </button>
               </div>
             </li>
           ))}
