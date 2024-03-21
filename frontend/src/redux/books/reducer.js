@@ -10,6 +10,23 @@ const bookReducer = (state = initialState, action) => {
     case actionTypes.DELETE_BOOK: {
       return state.filter((book) => book.id !== action.payload); // filter не модифицирует массив, а возвращает новый
     }
+    case actionTypes.TOGGLE_FAVORITE: {
+      // map возвоащает новый массив
+      return state.map(
+        (book) =>
+          book.id === action.payload
+            ? { ...book, isFavorite: !book.isFavorite }
+            : book
+        /*
+        (book) => {
+          if (book.id === action.payload) {
+            return { ...book, isFavorite: !book.isFavorite };
+          }
+          return book;
+        }
+        */
+      );
+    }
     default:
       return state;
   }

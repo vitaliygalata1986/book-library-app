@@ -16,6 +16,7 @@ function BookForm() {
     const randomBook = booksData[randomIndex]; // в итоге randomBook будет одним объектом из массива booksData
     const randomBookWidthId = {
       ...randomBook, // разделим на свойства объект randomBook
+      isFavorite:false,
       id: uuidv4(),
     };
     dispatch(addBook(randomBookWidthId));
@@ -29,6 +30,7 @@ function BookForm() {
       const book = {
         title,
         author,
+        isFavorite: false,
         id: uuidv4(),
       };
       // console.log(addBook(book));
