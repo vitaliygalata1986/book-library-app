@@ -1,6 +1,7 @@
 import styles from './BookForm.module.css';
+import { createBookWidthId } from '../../utils/createBookWithId';
 import { useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import booksData from '../../data/books.json';
 import { addBook } from '../../redux/books/actionCreators';
@@ -14,12 +15,15 @@ function BookForm() {
     const randomIndex = Math.floor(Math.random() * booksData.length); // получим случайное число от 0 до длины массива
     // const randomBook = booksData.find((book, index) => index === randomIndex);
     const randomBook = booksData[randomIndex]; // в итоге randomBook будет одним объектом из массива booksData
+    dispatch(addBook(createBookWidthId(randomBook)));
+    /*
     const randomBookWidthId = {
       ...randomBook, // разделим на свойства объект randomBook
       isFavorite:false,
       id: uuidv4(),
     };
     dispatch(addBook(randomBookWidthId));
+    */
   };
 
   const handleSubmit = (event) => {
@@ -27,14 +31,17 @@ function BookForm() {
     event.preventDefault();
     if (title && author) {
       // dispatch action
+      dispatch(addBook(createBookWidthId({ title, author })));
+      /*
       const book = {
         title,
         author,
         isFavorite: false,
         id: uuidv4(),
       };
+    */
       // console.log(addBook(book));
-      dispatch(addBook(book)); // вызвав addBook мы получим объект с type/payload
+      // dispatch(addBook(book)); // вызвав addBook мы получим объект с type/payload
       // этот объект мы передаем в функцию dispatch
       setTitle('');
       setAuthor('');
@@ -69,7 +76,5 @@ function BookForm() {
       </form>
     </div>
   );
-}
-{
 }
 export default BookForm;
