@@ -2,11 +2,18 @@ import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import styles from './BookList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteBook, toggleFaforite } from '../../redux/books/actionCreators';
+import { selectTitleFilter } from '../../redux/slices/filterSlice';
 function BookList() {
   const dispatch = useDispatch();
   // из за того, что мы вызвали внешнюю функцию useSelector
   // react будет выполнять ререндеринг функции BookList
   // при изменении состояния books
+
+  // const titleFilter = useSelector((state) => state.filter.title);
+  // или такой вариант
+  const titleFilter = useSelector(selectTitleFilter);
+  // console.log(titleFilter);
+
   const books = useSelector((state) => {
     // обычно эта функция возвращет часть состояния
     return state.books;
@@ -17,12 +24,20 @@ function BookList() {
     dispatch(toggleFaforite(id));
   };
 
+  // метод includes всегда возвращает true, если мы ищем пустую строку в любой строке
+  // получим новый массив отфильтрованных книг
+  const filteredBooks = books.filter((book) =>
+    book.title.toLowerCase().includes(titleFilter.toLowerCase())
+  );
+
+  //console.log(filteredBooks);
+
   return (
     <div className={`${styles['app-block']} ${styles['book-list']}`}>
       <h2>Book List</h2>
-      {books.length ? (
+      {filteredBooks.length ? (
         <ul>
-          {books.map((book, i) => (
+          {filteredBooks.map((book, i) => (
             <li key={book.id}>
               <div className={styles['book-info']}>
                 {++i}. {book.title} by <strong> {book.author}</strong>

@@ -32,6 +32,11 @@ const filterSlice = createSlice({
       return state;
       */
     },
+    resetFilters: (state) => {
+      // state.title='' 
+      // так будет проще
+      return initialState;
+    },
   },
 });
 
@@ -43,7 +48,7 @@ const filterSlice = createSlice({
 //const setTitleFilter = filterSlice.actions.setTitleFilter
 // или через деструктуризацию объекта
 
-export const { setTitleFilter } = filterSlice.actions;
+export const { setTitleFilter, resetFilters } = filterSlice.actions;
 
 export const selectTitleFilter = (state) => state.filter.title; // filter это заголовок slice
 
