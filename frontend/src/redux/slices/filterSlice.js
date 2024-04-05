@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   title: '',
+  author: '',
 };
 
 // редюсер для фильтров
@@ -23,7 +24,7 @@ const filterSlice = createSlice({
 
       // мутирование state при использовании slices
       state.title = action.payload;
-      // return state - это делать ненужно
+      // return state - это делать ненужно благодаря библиотеке Immer library
 
       /*
       state = {
@@ -32,8 +33,11 @@ const filterSlice = createSlice({
       return state;
       */
     },
+    setAuthorFilter: (state, action) => {
+      state.author = action.payload; // возвращать здесь state не нужно, мы его таким образом возвращаем
+    },
     resetFilters: (state) => {
-      // state.title='' 
+      // state.title=''
       // так будет проще
       return initialState;
     },
@@ -48,9 +52,11 @@ const filterSlice = createSlice({
 //const setTitleFilter = filterSlice.actions.setTitleFilter
 // или через деструктуризацию объекта
 
-export const { setTitleFilter, resetFilters } = filterSlice.actions;
+export const { setTitleFilter, setAuthorFilter, resetFilters } =
+  filterSlice.actions;
 
 export const selectTitleFilter = (state) => state.filter.title; // filter это заголовок slice
+export const selectAuthorFilter = (state) => state.filter.author; // filter это заголовок slice
 
 // это свойство содержит сам редюсер
 export default filterSlice.reducer;
