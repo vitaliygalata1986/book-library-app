@@ -5,6 +5,7 @@ import { deleteBook, toggleFaforite } from '../../redux/books/actionCreators';
 import {
   selectTitleFilter,
   selectAuthorFilter,
+  selectOnlyFavoriteFilter,
 } from '../../redux/slices/filterSlice';
 function BookList() {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ function BookList() {
   // или такой вариант
   const titleFilter = useSelector(selectTitleFilter);
   const authorFilter = useSelector(selectAuthorFilter); // функцию selectAuthorFilter вызывать не нужно, это коллбэк функция, которая вызывается внутри useSelector (это внешняя функция, и благодаря этому реакт выполняет ререндеринг всего компонента, когда у нас меняется соответствующая часть состояния - state.filter.author)
+  const onlyFavorityFilter = useSelector(selectOnlyFavoriteFilter);
+  // console.log(onlyFavority); // изначально все false
 
   const books = useSelector((state) => {
     // обычно эта функция возвращет часть состояния
@@ -40,11 +43,12 @@ function BookList() {
     const matchesTitle = book.title
       .toLowerCase()
       .includes(titleFilter.toLowerCase());
-    console.log(titleFilter);
     const matchesAuthor = book.author
       .toLowerCase()
       .includes(authorFilter.toLowerCase());
-    return matchesTitle && matchesAuthor;
+    const matchesFavority = onlyFavorityFilter ? book.isFavorite : true;
+
+    return matchesTitle && matchesAuthor && matchesFavority;
   });
 
   return (
