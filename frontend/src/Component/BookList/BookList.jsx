@@ -1,7 +1,12 @@
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import styles from './BookList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteBook, toggleFaforite } from '../../redux/books/actionCreators';
+import {
+  deleteBook,
+  toggleFavorite,
+  selectAllBooks,
+} from '../../redux/slices/bookSlice';
+
 import {
   selectTitleFilter,
   selectAuthorFilter,
@@ -15,19 +20,23 @@ function BookList() {
 
   // const titleFilter = useSelector((state) => state.filter.title);
   // или такой вариант
+
+  const books = useSelector(selectAllBooks);
   const titleFilter = useSelector(selectTitleFilter);
   const authorFilter = useSelector(selectAuthorFilter); // функцию selectAuthorFilter вызывать не нужно, это коллбэк функция, которая вызывается внутри useSelector (это внешняя функция, и благодаря этому реакт выполняет ререндеринг всего компонента, когда у нас меняется соответствующая часть состояния - state.filter.author)
   const onlyFavorityFilter = useSelector(selectOnlyFavoriteFilter);
   // console.log(onlyFavority); // изначально все false
 
+  /*
   const books = useSelector((state) => {
     // обычно эта функция возвращет часть состояния
     return state.books;
     // books - это наш редюсер, который мы подключили к магазину
   });
+  */
 
   const handleToggleFavorite = (id) => {
-    dispatch(toggleFaforite(id));
+    dispatch(toggleFavorite(id));
   };
 
   // метод includes всегда возвращает true, если мы ищем пустую строку в любой строке
