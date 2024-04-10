@@ -1,4 +1,5 @@
 import styles from './BookForm.module.css';
+import axios from 'axios';
 import { createBookWidthId } from '../../utils/createBookWithId';
 import { useDispatch } from 'react-redux';
 // import { v4 as uuidv4 } from 'uuid';
@@ -34,6 +35,18 @@ function BookForm() {
       setAuthor('');
     }
   };
+
+  const handleRandomViaApi = async () => {
+    try {
+      const responce = await axios.get('http://localhost:4000/random-book');
+      if (responce?.data?.title && responce?.data?.author) {
+        dispatch(addBook(createBookWidthId(responce.data)));
+      }
+    } catch (err) {
+      console.log('Error fetching random book', err);
+    }
+  };
+
   return (
     <div className={`${styles['app-block']} ${styles['book-form']}`}>
       <h2>Add new book</h2>
@@ -59,6 +72,9 @@ function BookForm() {
         <button type="submit">Add Book</button>
         <button type="button" onClick={handleAddRandomBook}>
           Add Random
+        </button>
+        <button type="button" onClick={handleRandomViaApi}>
+          Add Random via API
         </button>
       </form>
     </div>
