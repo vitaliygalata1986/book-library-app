@@ -16,7 +16,7 @@ function BookForm() {
     const randomIndex = Math.floor(Math.random() * booksData.length); // получим случайное число от 0 до длины массива
     // const randomBook = booksData.find((book, index) => index === randomIndex);
     const randomBook = booksData[randomIndex]; // в итоге randomBook будет одним объектом из массива booksData
-    dispatch(addBook(createBookWidthId(randomBook)));
+    dispatch(addBook(createBookWidthId(randomBook, 'random')));
     /*
     const randomBookWidthId = {
       ...randomBook, // разделим на свойства объект randomBook
@@ -30,7 +30,7 @@ function BookForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (title && author) {
-      dispatch(addBook(createBookWidthId({ title, author })));
+      dispatch(addBook(createBookWidthId({ title, author }, 'manual')));
       setTitle('');
       setAuthor('');
     }
@@ -40,7 +40,7 @@ function BookForm() {
     try {
       const responce = await axios.get('http://localhost:4000/random-book');
       if (responce?.data?.title && responce?.data?.author) {
-        dispatch(addBook(createBookWidthId(responce.data)));
+        dispatch(addBook(createBookWidthId(responce.data, 'API')));
       }
     } catch (err) {
       console.log('Error fetching random book', err);

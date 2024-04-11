@@ -91,7 +91,11 @@ function BookList() {
               <div className={styles['book-info']}>
                 {/* {++i}. {book.title} by <strong> {book.author}</strong> */}
                 {++i}. {highlightMatch(book.title, titleFilter)} by
-                <strong> {highlightMatch(book.author, authorFilter)}</strong>
+                <strong>
+                  {' '}
+                  {highlightMatch(book.author, authorFilter)}
+                </strong>{' '}
+                ({book.source})
               </div>
               <div className={styles['book-actions']}>
                 <span onClick={() => handleToggleFavorite(book.id)}>
