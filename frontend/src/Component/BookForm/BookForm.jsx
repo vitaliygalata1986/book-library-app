@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 // import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import booksData from '../../data/books.json';
-import { addBook, thunkFunction } from '../../redux/slices/bookSlice';
+import { addBook, fetchBooks } from '../../redux/slices/bookSlice';
 
 function BookForm() {
   const [title, setTitle] = useState('');
@@ -36,7 +36,7 @@ function BookForm() {
   };
 
   const handleRandomViaApi = () => {
-    dispatch(thunkFunction); // перадем в dispatch функцию thunkFunction
+    dispatch(fetchBooks()); // перадем в dispatch функцию fetchBooks
   };
 
   return (

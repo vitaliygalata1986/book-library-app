@@ -1,7 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { createBookWidthId } from '../../utils/createBookWithId';
 const initialState = [];
+
+export const fetchBooks = createAsyncThunk('books/fetchBook', async () => {
+  // первый аргумент - это название действия - books - должен совпадать с названием в createSlice
+  // второй - это функция, которая выполняется в бэкенде
+  const responce = await axios.get('http://localhost:4000/random-book');
+  // console.log(responce.data);
+  return responce.data;
+});
 
 const bookSlice = createSlice({
   name: 'books',
@@ -40,6 +48,18 @@ const bookSlice = createSlice({
       //   );
     },
   },
+  extraReducers: (builder) => {
+    // в случае, если промис был успешно удовлетворен и мы получили результат от сервера
+    // то будет вызвана функция, которую мы укажем вторым аргументом
+    // и это функция - редюсер
+    builder.addCase(fetchBooks.fulfilled, (state, action) => {
+      // и внутри этой функции мы можем выполнять действия по формированию нового состояния
+      // так как здесь работает Immer, то мы можем менять состояние
+      if (action.payload.title && action.payload.author) {
+        state.push(createBookWidthId(action.payload, 'API'));
+      }
+    });
+  },
 });
 
 export const { addBook, deleteBook, toggleFavorite } = bookSlice.actions;
@@ -48,6 +68,7 @@ export const selectAllBooks = (state) => state.books;
 
 export default bookSlice.reducer;
 
+/*
 export const thunkFunction = async (dispatch, getState) => {
   // console.log(getState());
   // async action
@@ -61,3 +82,4 @@ export const thunkFunction = async (dispatch, getState) => {
   }
   // console.log(getState());
 };
+*/
