@@ -6,7 +6,7 @@ const initialState = [];
 export const fetchBooks = createAsyncThunk('books/fetchBook', async () => {
   // первый аргумент - это название действия - books - должен совпадать с названием в createSlice
   // второй - это функция, которая выполняется в бэкенде
-  const responce = await axios.get('http://localhost:4000/random-book');
+  const responce = await axios.get('http://localhost:5000/random-book');
   // console.log(responce.data);
   return responce.data;
 });
@@ -59,6 +59,11 @@ const bookSlice = createSlice({
         state.push(createBookWidthId(action.payload, 'API'));
       }
     });
+    /*
+    builder.addCase(fetchBooks.rejected, (state, action) => {
+      // console.log(action);
+    });
+    */
   },
 });
 
