@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { UseDispatch, useSelector } from 'react-redux';
 const initialState = '';
 const errorSlice = createSlice({
   name: 'error',

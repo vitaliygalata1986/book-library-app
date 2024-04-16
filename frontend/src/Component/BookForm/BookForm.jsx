@@ -1,6 +1,7 @@
 import styles from './BookForm.module.css';
 import { createBookWidthId } from '../../utils/createBookWithId';
 import { useDispatch } from 'react-redux';
+import { setError } from '../../redux/slices/errorSlice';
 // import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import booksData from '../../data/books.json';
@@ -32,6 +33,8 @@ function BookForm() {
       dispatch(addBook(createBookWidthId({ title, author }, 'manual')));
       setTitle('');
       setAuthor('');
+    } else {
+      dispatch(setError('Please fill title and author'));
     }
   };
 

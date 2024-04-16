@@ -2,6 +2,7 @@ import styles from './App.module.css';
 import BookForm from '../BookForm/BookForm';
 import BookList from '../BookList/BookList';
 import Filter from '../Filter/Filter';
+import Error from '../Error/Error';
 function App() {
   return (
     <div className={styles.app}>
@@ -18,6 +19,7 @@ function App() {
           <BookList></BookList>
         </div>
       </main>
+      <Error />
     </div>
   );
 }
