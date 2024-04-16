@@ -39,7 +39,7 @@ function BookForm() {
   };
 
   const handleRandomViaApi = () => {
-    dispatch(fetchBooks()); // перадем в dispatch функцию fetchBooks
+    dispatch(fetchBooks('http://localhost:4000/random-book')); // перадем в dispatch функцию fetchBooks
   };
 
   return (

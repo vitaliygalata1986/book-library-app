@@ -1,15 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { createBookWidthId } from '../../utils/createBookWithId';
+import { setError } from './errorSlice';
 const initialState = [];
 
-export const fetchBooks = createAsyncThunk('books/fetchBook', async () => {
-  // первый аргумент - это название действия - books - должен совпадать с названием в createSlice
-  // второй - это функция, которая выполняется в бэкенде
-  const responce = await axios.get('http://localhost:5000/random-book');
-  // console.log(responce.data);
-  return responce.data;
-});
+export const fetchBooks = createAsyncThunk(
+  'books/fetchBook',
+  async (url, thunkAPI) => {
+    try {
+      // console.log(thunkAPI);
+      // первый аргумент - это название действия - books - должен совпадать с названием в createSlice
+      // второй - это функция, которая выполняется в бэкенде
+      const responce = await axios.get(url);
+      // console.log(responce.data);
+      return responce.data;
+    } catch (error) {
+      // console.log(error.message); // Network Error
+      // отправим оишбку в Redux store
+      thunkAPI.dispatch(setError(error.message));
+      throw error; // нам нужно сгенерировать эту же ошибку, чтобы мы не попали в нижний редюсер для состояния fetchBooks.fulfilled -  builder.addCase(fetchBooks.fulfilled, (state, action) => {
+      // тогда промис будет отклонен - и возникнет действие - rejected
+    }
+  }
+);
 
 const bookSlice = createSlice({
   name: 'books',
@@ -53,7 +66,11 @@ const bookSlice = createSlice({
     // то будет вызвана функция, которую мы укажем вторым аргументом
     // и это функция - редюсер
     builder.addCase(fetchBooks.fulfilled, (state, action) => {
+      // console.log('CALLED');
+      // console.log(action); // payload - > undefined
+      // {type: 'books/fetchBook/fulfilled' - в случае ошибки, эта функция редюсер вызывается fetchBooks.fulfilled - поэтому нам нужно выкинуть ошибку throw error
       // и внутри этой функции мы можем выполнять действия по формированию нового состояния
+
       // так как здесь работает Immer, то мы можем менять состояние
       if (action.payload.title && action.payload.author) {
         state.push(createBookWidthId(action.payload, 'API'));
@@ -61,7 +78,8 @@ const bookSlice = createSlice({
     });
     /*
     builder.addCase(fetchBooks.rejected, (state, action) => {
-      // console.log(action);
+     // console.log(action);
+     setError()
     });
     */
   },
