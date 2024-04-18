@@ -9,7 +9,7 @@ export const fetchBooks = createAsyncThunk(
   async (url, thunkAPI) => {
     try {
       // console.log(thunkAPI);
-      // первый аргумент - это название действия - books - должен совпадать с названием в createSlice
+      // первый аргумент - это название действия ('books/fetchBook',) - books - должен совпадать с названием в createSlice
       // второй - это функция, которая выполняется в бэкенде
       const responce = await axios.get(url);
       // console.log(responce.data);
