@@ -2,7 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { createBookWidthId } from '../../utils/createBookWithId';
 import { setError } from './errorSlice';
-const initialState = [];
+const initialState = {
+  books: [],
+  isLoadingViaAPI: false,
+};
 
 export const fetchBooks = createAsyncThunk(
   'books/fetchBook',
@@ -18,8 +21,11 @@ export const fetchBooks = createAsyncThunk(
       // console.log(error.message); // Network Error
       // отправим оишбку в Redux store
       thunkAPI.dispatch(setError(error.message));
-      throw error; // нам нужно сгенерировать эту же ошибку, чтобы мы не попали в нижний редюсер для состояния fetchBooks.fulfilled -  builder.addCase(fetchBooks.fulfilled, (state, action) => {
+      // throw error; // нам нужно сгенерировать эту же ошибку, чтобы мы не попали в нижний редюсер для состояния fetchBooks.fulfilled -  builder.addCase(fetchBooks.fulfilled, (state, action) => {
       // тогда промис будет отклонен - и возникнет действие - rejected
+
+      // другой вариант
+      return thunkAPI.rejectWithValue(error); // тоесть мы отклоняем этот промис со значением
     }
   }
 );
@@ -30,15 +36,22 @@ const bookSlice = createSlice({
   reducers: {
     addBook: (state, action) => {
       //return [...state, action.payload];
-      state.push(action.payload); // можно мутировать state благодаря библиотеке Immer library
+      //state.books.push();
+      state.books.push(action.payload);
+      //state.push(action.payload); // можно мутировать state благодаря библиотеке Immer library
     },
     deleteBook: (state, action) => {
-      return state.filter((book) => book.id !== action.payload);
+      //state.books = state.books.filter((book) => book.id !== action.payload);
+      // state.books = state.books.filter((book) => book.id !== action.payload);
+      return {
+        ...state,
+        books: state.books.filter((book) => book.id !== action.payload),
+      };
     },
     toggleFavorite: (state, action) => {
       // мы можем менять один из объектов в этом массиве
       // новый возвращать ненужно благодаря библиотеке Immer library
-      state.forEach((book) => {
+      state.books.forEach((book) => {
         if (book.id === action.payload) {
           book.isFavorite = !book.isFavorite;
         }
@@ -71,10 +84,19 @@ const bookSlice = createSlice({
       // {type: 'books/fetchBook/fulfilled' - в случае ошибки, эта функция редюсер вызывается fetchBooks.fulfilled - поэтому нам нужно выкинуть ошибку throw error
       // и внутри этой функции мы можем выполнять действия по формированию нового состояния
 
+      state.isLoadingViaAPI = false; // на false поменяем не зависимо от того, есть ли у нас action.payload.title && action.payload.author
+
       // так как здесь работает Immer, то мы можем менять состояние
-      if (action.payload.title && action.payload.author) {
-        state.push(createBookWidthId(action.payload, 'API'));
+      if (action.payload?.title && action.payload?.author) {
+        state.books.push(createBookWidthId(action.payload, 'API'));
       }
+    });
+    builder.addCase(fetchBooks.pending, (state) => {
+      // нет необходимости возвращать новый объект, благодаря наличию библиотеки Immer
+      state.isLoadingViaAPI = true;
+    });
+    builder.addCase(fetchBooks.rejected, (state) => {
+      state.isLoadingViaAPI = false;
     });
     /*
     builder.addCase(fetchBooks.rejected, (state, action) => {
@@ -87,7 +109,9 @@ const bookSlice = createSlice({
 
 export const { addBook, deleteBook, toggleFavorite } = bookSlice.actions;
 
-export const selectAllBooks = (state) => state.books;
+export const selectAllBooks = (state) => state.books.books;
+
+export const selectIsLoadingViaAPI = (state) => state.books.isLoadingViaAPI;
 
 export default bookSlice.reducer;
 

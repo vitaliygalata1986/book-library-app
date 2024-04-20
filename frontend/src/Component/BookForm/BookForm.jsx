@@ -1,17 +1,22 @@
 import styles from './BookForm.module.css';
 import { createBookWidthId } from '../../utils/createBookWithId';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 import { setError } from '../../redux/slices/errorSlice';
 // import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import booksData from '../../data/books.json';
-import { addBook, fetchBooks } from '../../redux/slices/bookSlice';
+import {
+  addBook,
+  fetchBooks,
+  selectIsLoadingViaAPI,
+} from '../../redux/slices/bookSlice';
 
 function BookForm() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // по умолчанию мы ничего с сервера не загружаем
+  const isLoadingViaAPI = useSelector(selectIsLoadingViaAPI);
+  // const [isLoading, setIsLoading] = useState(false); // по умолчанию мы ничего с сервера не загружаем
   const dispatch = useDispatch();
 
   const handleAddRandomBook = () => {
@@ -41,18 +46,21 @@ function BookForm() {
     }
   };
 
-  const handleRandomViaApi = async () => {
+  const handleRandomViaApi = () => {
     //dispatch(fetchBooks('http://localhost:4000/random-book')); // перадем в dispatch функцию fetchBooks
     // console.log(
     //   dispatch(fetchBooks('http://localhost:4000/random-book-delayed'))
     // ); // перадем в dispatch функцию fetchBooks);
-    try {
-      setIsLoading(true);
-      await dispatch(fetchBooks('http://localhost:4000/random-book-delayed'));
-    } finally {
-      // в любом случае в зависимости от того, выполнился ли промис успешно или нет - мы попадаем в блок finally
-      setIsLoading(false);
-    }
+    /*
+      try {
+        // setIsLoading(true);
+        await dispatch(fetchBooks('http://localhost:4000/random-book-delayed'));
+      } finally {
+        // в любом случае в зависимости от того, выполнился ли промис успешно или нет - мы попадаем в блок finally
+        // setIsLoading(false);
+      }
+    */
+    dispatch(fetchBooks('http://localhost:4000/random-book-delayed'));
   };
 
   return (
@@ -82,8 +90,12 @@ function BookForm() {
           Add Random
         </button>
 
-        <button type="button" onClick={handleRandomViaApi} disabled={isLoading}>
-          {isLoading ? (
+        <button
+          type="button"
+          onClick={handleRandomViaApi}
+          disabled={isLoadingViaAPI}
+        >
+          {isLoadingViaAPI ? (
             <>
               <span>Loading Book...</span>
               <FaSpinner className={styles['spinner']} />
