@@ -17,7 +17,7 @@ function Filter() {
   const authorFilter = useSelector(selectAuthorFilter); // подпишемся на изменение состояния
   const onlyFavoriteFilter = useSelector(selectOnlyFavoriteFilter);
 
-  const handleTitleFilterChnage = (e) => {
+  const handleTitleFilterChange = (e) => {
     dispatch(setTitleFilter(e.target.value));
   };
 
@@ -38,7 +38,7 @@ function Filter() {
       <div className={`${styles['filter-row']}`}>
         <div className={`${styles['filter-group']}`}>
           <input
-            onChange={handleTitleFilterChnage}
+            onChange={handleTitleFilterChange}
             type="text"
             placeholder="Filter by title..."
             value={titleFilter}

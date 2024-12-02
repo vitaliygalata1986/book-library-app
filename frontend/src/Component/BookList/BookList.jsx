@@ -61,7 +61,7 @@ function BookList() {
   });
 
   const highlightMatch = (text, filter) => {
-    //console.log('text=>', text, 'filter=>', filter); // text=> King Lear filter=> Ki
+    // console.log('text=>', text, 'filter=>', filter); // text=> King Lear filter=> Ki
     if (!filter) return text; // если фильтр не применен, то вернем текст без изменений
     // то мы не будем применять фон к тексту
     // иначе нужно разбить строку на строки и для некоторых добавить класс
@@ -69,7 +69,7 @@ function BookList() {
     // console.log(regex); // /(the)/gi    /(gi)/gi
     // console.log(text.split(regex)); // возвращает массив строк  ['', 'Ki', 'ng Lear']
     return text.split(regex).map((substring, i) => {
-      console.log(substring); // Ja cques the Fatalist
+      // console.log(substring); // Ja cques the Fatalist
       if (substring.toLowerCase() === filter.toLowerCase()) {
         return (
           <span key={i} className={`${styles['highlight']}`}>
@@ -80,7 +80,6 @@ function BookList() {
       return substring;
     });
   };
-
   return (
     <div className={`${styles['app-block']} ${styles['book-list']}`}>
       <h2>Book List</h2>
@@ -91,11 +90,8 @@ function BookList() {
               <div className={styles['book-info']}>
                 {/* {++i}. {book.title} by <strong> {book.author}</strong> */}
                 {++i}. {highlightMatch(book.title, titleFilter)} by
-                <strong>
-                  {' '}
-                  {highlightMatch(book.author, authorFilter)}
-                </strong>{' '}
-                ({book.source})
+                <strong> {highlightMatch(book.author, authorFilter)}</strong> (
+                {book.source})
               </div>
               <div className={styles['book-actions']}>
                 <span onClick={() => handleToggleFavorite(book.id)}>

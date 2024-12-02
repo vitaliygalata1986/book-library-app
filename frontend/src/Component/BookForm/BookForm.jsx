@@ -60,7 +60,7 @@ function BookForm() {
         // setIsLoading(false);
       }
     */
-    dispatch(fetchBooks('http://localhost:4000/random-book-delayed'));
+    dispatch(fetchBooks('http://localhost:4000/random-book'));
   };
 
   return (
