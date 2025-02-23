@@ -13,6 +13,7 @@ This project is built using:
 ## 🔧 Installation and launch
 
 1. Frontend Setup
+
    1.1 Open a terminal and navigate to the frontend directory:
 
    ```sh

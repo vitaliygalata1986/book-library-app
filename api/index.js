@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
+
 const booksData = require('./data/books.json');
 
 const app = express(); // создаем приложение, вызывая функцию express()
